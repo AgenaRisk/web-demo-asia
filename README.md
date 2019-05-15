@@ -14,4 +14,5 @@ The form is converted to a JSON and sent to the AR WAPI endpoint for processing.
 - Lung Cancer
 
 ### Resources
-[AgenaRisk Web API endpoint](https://api.online.agenarisk.com/public/calculate)
+- [Web App Demo Deployed Online](https://demo.online.agenarisk.com/)
+- [AgenaRisk Web API endpoint](https://api.online.agenarisk.com/public/calculate)
