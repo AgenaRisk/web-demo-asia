@@ -1,0 +1,48 @@
+[
+  {
+    "name": "Ask Patient:",
+    "questions": [
+      {
+        "node": "A",
+        "network": "Asia_0",
+        "label": "Visited Asia?",
+        "options": [
+          "yes",
+          "no"
+        ]
+      },
+      {
+        "node": "S",
+        "network": "Asia_0",
+        "label": "Smoker?",
+        "options": [
+          "yes",
+          "no"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Test Results:",
+    "questions": [
+      {
+        "node": "D",
+        "network": "Asia_0",
+        "label": "Dyspnoea?",
+        "options": [
+          "yes",
+          "no"
+        ]
+      },
+      {
+        "node": "X",
+        "network": "Asia_0",
+        "label": "Positive X-Ray?",
+        "options": [
+          "yes",
+          "no"
+        ]
+      }
+    ]
+  }
+]

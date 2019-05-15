@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-asia-d2
+spec:
+  selector:
+      matchLabels:
+        app: demo-asia-d2
+  replicas: 5
+  strategy:
+    # type: Recreate
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0%
+  template:
+    metadata:
+      labels:
+        app: demo-asia-d2
+        date: 'Timestamp'
+    spec:
+      containers:
+      - name: demo-asia-d2
+        image: agenacr.azurecr.io/demo-asia-d2:0.1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-asia-d2
+spec:
+  selector:
+    app: demo-asia-d2
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 80

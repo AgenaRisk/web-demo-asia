@@ -1,0 +1,17 @@
+[
+  {
+    "label": "Tuberculosis",
+    "node": "T",
+    "network": "Asia_0"
+  },
+  {
+    "label": "Lung Cancer",
+    "node": "L",
+    "network": "Asia_0"
+  },
+  {
+    "label": "Bronchitis",
+    "node": "B",
+    "network": "Asia_0"
+  }
+]
