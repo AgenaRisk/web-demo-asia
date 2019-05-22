@@ -60,7 +60,7 @@ const ResultTable = ({ output }) => (
         // As we decide to keep a result item, also copy the label text from the listed item into the result for rendering
         defOutput.forEach((listedElement) => {
           if (listedElement.network === item.network && listedElement.node === item.node) {
-            filtered.push({...item,labelText:listedElement.label});
+            filtered.push({ ...item, labelText: listedElement.label });
           }
         });
         return filtered;
