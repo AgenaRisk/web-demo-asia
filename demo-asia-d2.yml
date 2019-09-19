@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: demo-asia-d2
-        image: agenacr.azurecr.io/demo-asia-d2:0.1
+        image: agenacr.azurecr.io/demo-asia-d2:0.2
         imagePullPolicy: Always
         ports:
         - containerPort: 80

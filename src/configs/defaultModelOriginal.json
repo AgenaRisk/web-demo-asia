@@ -1,0 +1,198 @@
+{
+    "model": {
+        "networks": [
+            {
+                "id": "Asia_0",
+                "name": "Asia",
+                "nodes": [
+                    {
+                        "id": "B",
+                        "name": "Has bronchitis",
+                        "configuration": {
+                            "type": "Labelled",
+                            "table": {
+                                "type": "Manual",
+                                "probabilities": [
+                                    [0.6,0.3],
+                                    [0.4,0.7]
+                                ],
+                                "nptCompiled": true
+                            },
+                            "states": [
+                                "yes",
+                                "no"
+                            ]
+                        }
+                    },
+                    {
+                        "id": "D",
+                        "name": "Dyspnoea?",
+                        "configuration": {
+                            "type": "Labelled",
+                            "table": {
+                                "type": "Manual",
+                                "probabilities": [
+                                    [0.9,0.8,0.7,0.1],
+                                    [0.1,0.2,0.3,0.9]
+                                ],
+                                "nptCompiled": true
+                            },
+                            "states": [
+                                "yes",
+                                "no"
+                            ]
+                        }
+                    },
+                    {
+                        "id": "A",
+                        "name": "Visit to Asia?",
+                        "configuration": {
+                            "type": "Labelled",
+                            "table": {
+                                "type": "Manual",
+                                "probabilities": [
+                                    [0.01],
+                                    [0.99]
+                                ],
+                                "nptCompiled": true
+                            },
+                            "states": [
+                                "yes",
+                                "no"
+                            ]
+                        }
+                    },
+                    {
+                        "id": "S",
+                        "name": "Smoker?",
+                        "configuration": {
+                            "type": "Labelled",
+                            "table": {
+                                "type": "Manual",
+                                "probabilities": [
+                                    [0.5],
+                                    [0.5]
+                                ],
+                                "nptCompiled": true
+                            },
+                            "states": [
+                                "yes",
+                                "no"
+                            ]
+                        }
+                    },
+                    {
+                        "id": "T",
+                        "name": "Has tuberculosis",
+                        "configuration": {
+                            "type": "Labelled",
+                            "table": {
+                                "type": "Manual",
+                                "probabilities": [
+                                    [0.05,0.01],
+                                    [0.95,0.99]
+                                ],
+                                "nptCompiled": true
+                            },
+                            "states": [
+                                "yes",
+                                "no"
+                            ]
+                        }
+                    },
+                    {
+                        "id": "L",
+                        "name": "Has lung cancer",
+                        "configuration": {
+                            "type": "Labelled",
+                            "table": {
+                                "type": "Manual",
+                                "probabilities": [
+                                    [0.1,0.01],
+                                    [0.9,0.99]
+                                ],
+                                "nptCompiled": true
+                            },
+                            "states": [
+                                "yes",
+                                "no"
+                            ]
+                        }
+                    },
+                    {
+                        "id": "TBoC",
+                        "name": "Tuberculosis or cancer",
+                        "configuration": {
+                            "type": "Labelled",
+                            "table": {
+                                "type": "Manual",
+                                "probabilities": [
+                                    [1,1,1,0],
+                                    [0,0,0,1]
+                                ],
+                                "nptCompiled": true
+                            },
+                            "states": [
+                                "yes",
+                                "no"
+                            ]
+                        }
+                    },
+                    {
+                        "id": "X",
+                        "name": "Positive X-ray?",
+                        "configuration": {
+                            "type": "Labelled",
+                            "table": {
+                                "type": "Manual",
+                                "probabilities": [
+                                    [0.98,0.05],
+                                    [0.02,0.95]
+                                ],
+                                "nptCompiled": true
+                            },
+                            "states": [
+                                "yes",
+                                "no"
+                            ]
+                        }
+                    }
+                ],
+                "links": [
+                    {
+                        "parent": "S",
+                        "child": "B"
+                    },
+                    {
+                        "parent": "B",
+                        "child": "D"
+                    },
+                    {
+                        "parent": "TBoC",
+                        "child": "D"
+                    },
+                    {
+                        "parent": "A",
+                        "child": "T"
+                    },
+                    {
+                        "parent": "S",
+                        "child": "L"
+                    },
+                    {
+                        "parent": "T",
+                        "child": "TBoC"
+                    },
+                    {
+                        "parent": "L",
+                        "child": "TBoC"
+                    },
+                    {
+                        "parent": "TBoC",
+                        "child": "X"
+                    }
+                ]
+            }
+        ]
+    }
+}

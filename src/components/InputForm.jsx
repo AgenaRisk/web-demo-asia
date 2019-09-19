@@ -1,12 +1,14 @@
 import React from 'react';
 import {
-  Dropdown, Stack, PrimaryButton,
+  Dropdown, Stack, PrimaryButton, Toggle, TextField,
 } from 'office-ui-fabric-react/lib/';
 
 import styles from '../configs/styles';
 import tokens from '../configs/tokens';
 
 import calculate from '../util/apis';
+
+import defModel from '../configs/defaultModel.json';
 
 function createObservation({ node, network, selected }) {
   return {
@@ -21,9 +23,8 @@ function createObservation({ node, network, selected }) {
   };
 }
 
-async function handleSubmit(event, input, setOutput) {
+async function handleSubmit(event, input, setOutput, override, overrideContent) {
   const sendData = {
-    model: 'models/Asia.ast',
     dataSet: {
       observations: input.map(group => group.questions)
         .reduce((a1, a2) => a1.concat(a2))
@@ -31,17 +32,99 @@ async function handleSubmit(event, input, setOutput) {
         .map(entry => createObservation(entry)),
     },
   };
+
+  if (override){
+    try {
+      const modelJson = JSON.parse(overrideContent); 
+      sendData.model = modelJson;
+    }
+    catch (parseError){
+      return false;
+    }
+  }
+  else {
+    sendData.modelPath = 'models/Asia.ast';
+  }
+
   const out = await calculate(sendData);
+
+  console.log(out);
+
+  if (out.status === "failure"){
+    alert(out.message);
+    return false;
+  }
+
+  if (out.status === 500){
+    alert("Internal Server Error");
+    return false;
+  }
+
+  if (!out.results) {
+    out.results = [];
+  }
+
   setOutput(out);
 }
 
-export default ({ input, setInput, setOutput }) => {
-  const DEFAULT_OPTION = 'Select';
+class InputForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showJsonOverride: false,
+      modelJson: defModel.text
+    };
 
-  return (
-    <React.Fragment>
-      <h2>Inputs</h2>
-      {
+    this._toggleShowJsonOverride.bind(this);
+    this._getErrorMessage.bind(this);
+  }
+
+  _toggleShowJsonOverride = () => {
+    var newValue = !this.state.showJsonOverride;
+    this.setState({
+      showJsonOverride: newValue
+    });
+  }
+
+  _getErrorMessage = (value) => {
+
+    this.setState({
+      modelJson: value
+    });
+
+    try {
+      JSON.parse(value);
+    }
+    catch(parseError){
+      return `Can't parse as a JSON`;
+    }
+
+    return  '';
+  };
+
+  render() {
+    const DEFAULT_OPTION = 'Select';
+    const { input, setInput, setOutput } = this.props;
+
+    return (
+      <React.Fragment>
+        <h2>Inputs</h2>
+        <Toggle label="Override model with custom JSON" inlineLabel checked={this.state.showJsonOverride} onChange={this._toggleShowJsonOverride} />
+        {this.state.showJsonOverride && (
+          <Stack vertical className={styles.group}>
+            <TextField
+              label="Override model with this JSON"
+              multiline
+              autoAdjustHeight
+              onGetErrorMessage={this._getErrorMessage}
+              validateOnFocusIn
+              validateOnFocusOut
+              value={this.state.modelJson}
+              description="Valid JSON of the model to calculate"
+             />
+          </Stack>
+        )}
+        {
           input.map(({ name, questions }, groupdId) => (
             <Stack vertical className={styles.group} key={name}>
 
@@ -65,7 +148,7 @@ export default ({ input, setInput, setOutput }) => {
                             const inputUpdated = [...input];
                             inputUpdated[groupdId].questions[questionId].selected = item.key;
                             setInput(inputUpdated);
-                            handleSubmit({}, input, setOutput); // Optional: auto-calculation makes the submit button redundant
+                            handleSubmit({}, input, setOutput, this.state.showJsonOverride, this.state.modelJson); // Optional: auto-calculation makes the submit button redundant
                           }}
                         />
                       </Stack.Item>
@@ -76,13 +159,15 @@ export default ({ input, setInput, setOutput }) => {
             </Stack>
           ))
         }
-      <Stack vertical className={styles.group}>
-        <PrimaryButton
-          text="Calculate"
-          onClick={e => handleSubmit(e, input, setOutput)}
-          allowDisabledFocus
-        />
-      </Stack>
-    </React.Fragment>
-  );
-};
+        <Stack vertical className={styles.group}>
+          <PrimaryButton
+            text="Calculate"
+            onClick={e => handleSubmit(e, input, setOutput, this.state.showJsonOverride, this.state.modelJson)}
+            allowDisabledFocus
+          />
+        </Stack>
+      </React.Fragment>
+    );
+  }
+}
+export default InputForm;
