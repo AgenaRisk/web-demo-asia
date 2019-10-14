@@ -9,7 +9,7 @@ az acr login --name $acrName
 cd d:\work\repos\agenarisk\demo-asia-d2\
 $deploymentName="demo-asia-d2"
 $containerName="demo-asia-d2"
-$imageVersion="0.2"
+$imageVersion="0.3"
 $imageName=-join("demo-asia-d2",":",$imageVersion)
 $imageTag=-join($acrName,".azurecr.io/",$imageName).ToLower()
 yarn build
