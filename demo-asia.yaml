@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: demo-asia-d2
+  name: demo-asia
 spec:
   selector:
       matchLabels:
-        app: demo-asia-d2
-  replicas: 5
+        app: demo-asia
+  replicas: 1
   strategy:
     # type: Recreate
     type: RollingUpdate
@@ -16,12 +16,12 @@ spec:
   template:
     metadata:
       labels:
-        app: demo-asia-d2
+        app: demo-asia
         date: 'Timestamp'
     spec:
       containers:
-      - name: demo-asia-d2
-        image: agenacr.azurecr.io/demo-asia-d2:0.3
+      - name: demo-asia
+        image: agenacr.azurecr.io/demo-asia:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 80
@@ -31,10 +31,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: demo-asia-d2
+  name: demo-asia
 spec:
   selector:
-    app: demo-asia-d2
+    app: demo-asia
   ports:
   - name: http
     protocol: TCP
@@ -46,25 +46,25 @@ spec:
 apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
 metadata:
-  name: tls-secret-demo
+  name: tls-secret-demo-asia
 spec:
-  secretName: tls-secret-demo
+  secretName: tls-secret-demo-asia
   dnsNames:
-  - demo.online.agenarisk.com
-  renewBefore: 360h
+  - asia.demo.online.agenarisk.com
+  renewBefore: 720h
   acme:
     config:
     - http01:
         ingressClass: nginx
       domains:
-      - demo.online.agenarisk.com
+      - asia.demo.online.agenarisk.com
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
 
 ---
 
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: ingress-demo-api
@@ -78,13 +78,13 @@ metadata:
 spec:
   tls:
   - hosts:
-    - demo.online.agenarisk.com
-    secretName: tls-secret-demo
+    - asia.demo.online.agenarisk.com
+    secretName: tls-secret-demo-asia
   rules:
-  - host: demo.online.agenarisk.com
+  - host: asia.demo.online.agenarisk.com
     http:
       paths:
       - path: /
         backend:
-          serviceName: demo-asia-d2
+          serviceName: demo-asia
           servicePort: 80

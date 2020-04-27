@@ -15,7 +15,7 @@ import defInput from '../configs/defaultInput.json';
 initializeIcons();
 
 const App = () => {
-  const [output, setOutput] = useState({ results: [] });
+  const [output, setOutput] = useState({ resultBody: [] });
   const [input, setInput] = useState(defInput);
 
   return (

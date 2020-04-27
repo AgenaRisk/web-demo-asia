@@ -1,7 +1,8 @@
 import React from 'react';
 import {
-  Dropdown, Stack, PrimaryButton, Toggle, TextField,
+  Dropdown, Stack, PrimaryButton, Toggle, TextField, Modal, Spinner, SpinnerSize
 } from 'office-ui-fabric-react/lib/';
+import { mergeStyleSets } from '@uifabric/styling';
 
 import styles from '../configs/styles';
 import tokens from '../configs/tokens';
@@ -23,7 +24,7 @@ function createObservation({ node, network, selected }) {
   };
 }
 
-async function handleSubmit(event, input, setOutput, override, overrideContent) {
+async function handleSubmit(event, input, setOutput, override, overrideContent, _showLoadingModal) {
   const sendData = {
     dataSet: {
       observations: input.map(group => group.questions)
@@ -46,7 +47,13 @@ async function handleSubmit(event, input, setOutput, override, overrideContent) 
     sendData.modelPath = 'models/Asia.ast';
   }
 
+  sendData['sync-wait']='true';
+
+  _showLoadingModal(true);
+
   const out = await calculate(sendData);
+  
+  _showLoadingModal(false);
 
   console.log(out);
 
@@ -60,8 +67,8 @@ async function handleSubmit(event, input, setOutput, override, overrideContent) 
     return false;
   }
 
-  if (!out.results) {
-    out.results = [];
+  if (!out.resultBody) {
+    out.resultBody = [];
   }
 
   setOutput(out);
@@ -72,7 +79,8 @@ class InputForm extends React.Component {
     super(props);
     this.state = {
       showJsonOverride: false,
-      modelJson: defModel.text
+      modelJson: defModel.text,
+      showModal: false
     };
 
     this._toggleShowJsonOverride.bind(this);
@@ -101,6 +109,12 @@ class InputForm extends React.Component {
 
     return  '';
   };
+
+  _showLoadingModal = (status) => {
+    this.setState({
+      showModal: status
+    });
+  }
 
   render() {
     const DEFAULT_OPTION = 'Select';
@@ -148,7 +162,7 @@ class InputForm extends React.Component {
                             const inputUpdated = [...input];
                             inputUpdated[groupdId].questions[questionId].selected = item.key;
                             setInput(inputUpdated);
-                            handleSubmit({}, input, setOutput, this.state.showJsonOverride, this.state.modelJson); // Optional: auto-calculation makes the submit button redundant
+                            //handleSubmit({}, input, setOutput, this.state.showJsonOverride, this.state.modelJson); // Auto-calculation
                           }}
                         />
                       </Stack.Item>
@@ -162,12 +176,48 @@ class InputForm extends React.Component {
         <Stack vertical className={styles.group}>
           <PrimaryButton
             text="Calculate"
-            onClick={e => handleSubmit(e, input, setOutput, this.state.showJsonOverride, this.state.modelJson)}
+            onClick={e => handleSubmit(e, input, setOutput, this.state.showJsonOverride, this.state.modelJson, this._showLoadingModal)}
             allowDisabledFocus
           />
         </Stack>
+        {
+          <Modal
+            titleAriaId="Please wait..."
+            subtitleAriaId="Calculating"
+            isOpen={this.state.showModal}
+            // onDismiss = {this._closeModal}
+            isBlocking={true}
+            containerClassName={Styles['loading-modal']}
+          // dragOptions={this.state.isDraggable ? this._dragOptions : undefined}
+          >
+            <div className={Styles['loading-modal-spinner']}>
+              <Spinner
+                label="Please wait..."
+                ariaLive="assertive"
+                labelPosition="right"
+                size={SpinnerSize.large}
+              />
+            </div>
+
+          </Modal>
+        }
       </React.Fragment>
     );
   }
 }
 export default InputForm;
+
+const Styles = mergeStyleSets({
+  'loading-modal': {
+    width: 'auto',
+    height: 'auto',
+    'min-width': 'auto',
+    'min-height': 'auto'
+  },
+
+  'loading-modal-spinner': {
+    padding: '20px',
+    margin: '0'
+  }
+
+});

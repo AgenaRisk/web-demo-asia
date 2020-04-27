@@ -13,6 +13,7 @@
 
 # misc
 /src/dev
+/dev
 .DS_Store
 .env.local
 .env.development.local
