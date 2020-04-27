@@ -65,6 +65,9 @@ const ResultTable = ({ output }) => (
         });
         return filtered;
       }, [])
+        .sort(function(a, b){
+          return a.labelText.localeCompare(b.labelText);
+        })
         // Keep rendering code separate from filtering for maintanability
         .map(({
           node, resultValues, network, labelText,
