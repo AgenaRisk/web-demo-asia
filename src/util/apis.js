@@ -1,27 +1,35 @@
-export default async (input, apiUrl) => {
+export default async (requestJson, apiUrl) => {
 
   if (!apiUrl) {
     apiUrl = 'https://api-prod.online.agenarisk.com/public/calculate';
   }
 
-  const jobSubmission = await submitJob(input, apiUrl);
+  const initialResponse = await submitJob(requestJson, apiUrl);
 
-  if (jobSubmission == null) {
+  if (initialResponse == null) {
     // Error
     return null;
   }
 
-  if (jobSubmission.status && (jobSubmission.status === 'success' || jobSubmission.status === 'failure')){
+  if (initialResponse.status && (initialResponse.status === 'success' || initialResponse.status === 'failure')){
     // Check if the job was resolved on submission
-    return jobSubmission;
+    return initialResponse;
   }
 
-  if (!jobSubmission.pollingUrl) {
+  if (!initialResponse.pollingUrl) {
     // Rejected, no polling URL
-    return jobSubmission;
+    return initialResponse;
   }
 
-  return await (pollResult(jobSubmission.pollingUrl));
+  while(true){
+    let pollResponse = await pollResult(initialResponse.pollingUrl, 5000);
+    if (pollResponse == null){
+      return null;
+    }
+    if (pollResponse.status && (pollResponse.status === 'success' || pollResponse.status === 'failure')){
+      return pollResponse;
+    }
+  }
 };
 
 function submitJob(request, url) {
@@ -41,9 +49,9 @@ function submitJob(request, url) {
     });
 }
 
-function pollResult(url) {
+function pollResult(url, delay) {
   console.log('Checking job status at: ' + url);
-  return sleep(5000).then(v => fetch(url, {
+  return sleep(delay).then(v => fetch(url, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
