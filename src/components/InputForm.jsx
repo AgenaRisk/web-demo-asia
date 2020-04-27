@@ -34,12 +34,12 @@ async function handleSubmit(event, input, setOutput, override, overrideContent, 
     },
   };
 
-  if (override){
+  if (override) {
     try {
-      const modelJson = JSON.parse(overrideContent); 
+      const modelJson = JSON.parse(overrideContent);
       sendData.model = modelJson;
     }
-    catch (parseError){
+    catch (parseError) {
       return false;
     }
   }
@@ -47,22 +47,22 @@ async function handleSubmit(event, input, setOutput, override, overrideContent, 
     sendData.modelPath = 'models/Asia.ast';
   }
 
-  sendData['sync-wait']='true';
+  sendData['sync-wait'] = 'true';
 
   _showLoadingModal(true);
 
   const out = await calculate(sendData);
-  
+
   _showLoadingModal(false);
 
   console.log(out);
 
-  if (out.status === "failure"){
+  if (out.status === "failure") {
     alert(out.message);
     return false;
   }
 
-  if (out.status === 500){
+  if (out.status === 500) {
     alert("Internal Server Error");
     return false;
   }
@@ -103,11 +103,11 @@ class InputForm extends React.Component {
     try {
       JSON.parse(value);
     }
-    catch(parseError){
+    catch (parseError) {
       return `Can't parse as a JSON`;
     }
 
-    return  '';
+    return '';
   };
 
   _showLoadingModal = (status) => {
@@ -135,7 +135,7 @@ class InputForm extends React.Component {
               validateOnFocusOut
               value={this.state.modelJson}
               description="Valid JSON of the model to calculate"
-             />
+            />
           </Stack>
         )}
         {
@@ -181,25 +181,27 @@ class InputForm extends React.Component {
           />
         </Stack>
         {
-          <Modal
-            titleAriaId="Please wait..."
-            subtitleAriaId="Calculating"
-            isOpen={this.state.showModal}
-            // onDismiss = {this._closeModal}
-            isBlocking={true}
-            containerClassName={Styles['loading-modal']}
-          // dragOptions={this.state.isDraggable ? this._dragOptions : undefined}
-          >
-            <div className={Styles['loading-modal-spinner']}>
-              <Spinner
-                label="Please wait..."
-                ariaLive="assertive"
-                labelPosition="right"
-                size={SpinnerSize.large}
-              />
-            </div>
+          <div style={{ "position": "fixed" }}>
+            <Modal
+              titleAriaId="Please wait..."
+              subtitleAriaId="Calculating"
+              isOpen={this.state.showModal}
+              // onDismiss = {this._closeModal}
+              isBlocking={true}
+              containerClassName={Styles['loading-modal']}
+            // dragOptions={this.state.isDraggable ? this._dragOptions : undefined}
+            >
+              <div className={Styles['loading-modal-spinner']}>
+                <Spinner
+                  label="Please wait..."
+                  ariaLive="assertive"
+                  labelPosition="right"
+                  size={SpinnerSize.large}
+                />
+              </div>
 
-          </Modal>
+            </Modal>
+          </div>
         }
       </React.Fragment>
     );

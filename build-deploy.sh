@@ -11,6 +11,7 @@ az acr login --name $registry
 image="$registry.azurecr.io/wapps-demo-asia"
 
 version='0.4'
+rm -rf build
 yarn build
 
 docker build --force-rm=true -t "$image:$version" -t "$image:latest" .
