@@ -13,8 +13,6 @@ image="$registry.azurecr.io/wapps-demo-asia"
 version='0.4'
 yarn build
 
-mvn clean install
-
 docker build --force-rm=true -t "$image:$version" -t "$image:latest" .
 docker push "$image:$version"
 docker push "$image:latest"

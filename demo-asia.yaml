@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: demo-asia
-        image: agenacr.azurecr.io/demo-asia:latest
+        image: agenacr.azurecr.io/wapps-demo-asia:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 80
