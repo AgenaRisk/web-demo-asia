@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@uifabric/icons": "^6.5.1",
-    "@uifabric/styling": "^6.46.1",
-    "office-ui-fabric-react": "^6.167.2",
-    "react": "^16.8.6",
-    "react-bootstrap": "^1.0.0-beta.8",
-    "react-dom": "^16.8.6",
-    "react-scripts": "2.1.8"
+    "@uifabric/icons": "^7.3.31",
+    "@uifabric/styling": "^7.11.8",
+    "office-ui-fabric-react": "^7.107.5",
+    "react": "^16.13.1",
+    "react-bootstrap": "^1.0.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "^3.4.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -28,10 +28,11 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "eslint-config-airbnb": "17.1.0",
-    "eslint-plugin-import": "2.14.0",
-    "eslint-plugin-json": "^1.4.0",
-    "eslint-plugin-jsx-a11y": "6.1.1",
-    "eslint-plugin-react": "7.11.0"
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-json": "^2.1.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.19.0",
+    "yarn-upgrade-all": "^0.5.2"
   }
 }
