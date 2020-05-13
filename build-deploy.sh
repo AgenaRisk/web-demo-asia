@@ -1,5 +1,7 @@
 #!/bin/bash
 
+kubectx agenaAksProd
+
 BASEDIR=$(dirname "$0")
 cd $BASEDIR
 
