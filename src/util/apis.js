@@ -1,7 +1,7 @@
 export default async (requestJson, apiUrl) => {
 
   if (!apiUrl) {
-    apiUrl = 'https://api-prod.online.agenarisk.com/public/calculate';
+    apiUrl = 'https://api.prod.agenarisk.com/public/calculate';
   }
 
   const initialResponse = await submitJob(requestJson, apiUrl);
