@@ -54,7 +54,7 @@ const ResultTable = ({ output }) => (
     <h2>Predictions</h2>
 
     {
-      output.resultBody.reduce((filtered, item) => {
+      output.results.reduce((filtered, item) => {
         // Check against the output definition and only keep items listed
         // As we have to iterate over both array of results and array of items to show, use reduce with accumulated array
         // As we decide to keep a result item, also copy the label text from the listed item into the result for rendering

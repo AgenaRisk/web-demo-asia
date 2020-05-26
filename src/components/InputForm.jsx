@@ -67,8 +67,8 @@ async function handleSubmit(event, input, setOutput, override, overrideContent, 
     return false;
   }
 
-  if (!out.resultBody) {
-    out.resultBody = [];
+  if (!out.results) {
+    out.results = [];
   }
 
   setOutput(out);

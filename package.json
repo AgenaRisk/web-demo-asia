@@ -1,6 +1,6 @@
 {
   "name": "demo-asia",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "private": true,
   "dependencies": {
     "@uifabric/icons": "^7.3.31",
