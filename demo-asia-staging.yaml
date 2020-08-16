@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-asia
+  namespace: public
+spec:
+  selector:
+      matchLabels:
+        app: demo-asia
+  replicas: 1
+  strategy:
+    # type: Recreate
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0%
+  template:
+    metadata:
+      labels:
+        app: demo-asia
+        date: 'Timestamp'
+    spec:
+      containers:
+      - name: demo-asia
+        image: agenacr.azurecr.io/wapps-demo-asia:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-asia
+  namespace: public
+spec:
+  selector:
+    app: demo-asia
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 80
+
+---
+
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: tls-secret-demo-asia
+  namespace: public
+spec:
+  secretName: tls-secret-demo-asia
+  dnsNames:
+  - asia.demo.staging.agenarisk.com
+  renewBefore: 720h
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+
+---
+
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-demo-api
+  namespace: public
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+spec:
+  tls:
+  - hosts:
+    - asia.demo.staging.agenarisk.com
+    secretName: tls-secret-demo-asia
+  rules:
+  - host: asia.demo.staging.agenarisk.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: demo-asia
+          servicePort: 80

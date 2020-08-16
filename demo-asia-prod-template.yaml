@@ -53,7 +53,7 @@ metadata:
 spec:
   secretName: tls-secret-demo-asia
   dnsNames:
-  - asia.demo.online.agenarisk.com
+  - asia.demo.prod.agenarisk.com
   renewBefore: 720h
   issuerRef:
     name: letsencrypt-prod
@@ -75,10 +75,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - asia.demo.online.agenarisk.com
+    - asia.demo.prod.agenarisk.com
     secretName: tls-secret-demo-asia
   rules:
-  - host: asia.demo.online.agenarisk.com
+  - host: asia.demo.prod.agenarisk.com
     http:
       paths:
       - path: /

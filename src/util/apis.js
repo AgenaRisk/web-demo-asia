@@ -1,7 +1,12 @@
 export default async (requestJson, apiUrl) => {
 
   if (!apiUrl) {
-    apiUrl = 'https://api.prod.agenarisk.com/public/calculate';
+    if (window.location.href.indexOf("staging") >= 0){
+      apiUrl = 'https://api.staging.agenarisk.com/public/calculate';
+    }
+    else {
+      apiUrl = 'https://api.prod.agenarisk.com/public/calculate';
+    }
   }
 
   const initialResponse = await submitJob(requestJson, apiUrl);
