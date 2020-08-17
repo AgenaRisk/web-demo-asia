@@ -19,4 +19,4 @@ az acr login --name $registry
 docker push "$image:$version"
 docker push "$image:latest"
 
-yq w -d1 demo-asia-prod-template.yaml "spec.template.spec.containers[0].image" "$image:$version" > demo-asia.yaml
+yq w -d1 demo-asia-prod-template.yaml "spec.template.spec.containers[0].image" "$image:$version" > demo-asia-prod.yaml
